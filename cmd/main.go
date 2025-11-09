@@ -1,10 +1,21 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gin-gonic/gin"
+	"github.com/oloomoses/todo/internal/config"
+	"github.com/oloomoses/todo/internal/db"
 )
 
 func main() {
+	if err := config.Load(); err != nil {
+		log.Fatal("Failed to load config: ", err)
+	}
+
+	dbconn := db.InitDB()
+	db.Migrate(dbconn)
+
 	r := gin.Default()
 
 	r.GET("/", home)
