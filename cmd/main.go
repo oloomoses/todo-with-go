@@ -16,38 +16,17 @@ func main() {
 	}
 
 	dbconn := db.InitDB()
-	db.Migrate(dbconn)
+	todoRepo := repository.NewTodoRepo(dbconn)
+	todo := handler.NewTodoHandler(todoRepo)
+	// db.Migrate(dbconn)
 
 	r := gin.Default()
 
-	newTodo := repository.NewTodoRepo(dbconn)
-	todo := handler.NewTodohHandler(newTodo)
-
-	r.GET("/", home)
 	r.GET("/todos", todo.All)
-	r.POST("/todo", todo.Create)
 	r.GET("/todo/:id", todo.Find)
-	r.PATCH("/todo/{id}", todo.Update)
-	r.DELETE("/todo/{id}", todo.Delete)
+	r.POST("/todo", todo.Create)
+	r.PUT("/todo/:id", todo.Update)
+	r.DELETE("/todo/:id", todo.Delete)
 
 	r.Run()
-}
-
-func home(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"Message": "Pong",
-	})
-
-}
-
-func getTodos(c *gin.Context) {
-
-}
-
-func updateTodo(c *gin.Context) {
-
-}
-
-func deleteTodo(c *gin.Context) {
-
 }
