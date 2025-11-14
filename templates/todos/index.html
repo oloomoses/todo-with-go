@@ -1,0 +1,19 @@
+{{define "title"}}All Todos{{end}}
+
+{{define "content"}}
+<h2>Todos</h2>
+
+<ul>
+    {{range .Todos}}
+    <li>
+        <a href="/todos/{{.ID}}">{{.Title}}</a>
+        <p>{{.Completed}}</p>
+    </li>
+    {{else}}
+    <li>No todos found</li>
+
+    {{end}}
+</ul>
+<a href="/todo/new">+ New Todo</a>
+
+{{end}}
