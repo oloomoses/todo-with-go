@@ -17,10 +17,11 @@ func main() {
 
 	r := gin.Default()
 
-	// tmpl := template.Must(template.ParseGlob(filepath.Join("templates/**/*.html")))
+	// pattern := filepath.Join("templates", "**", "*.html")
+	// tmpl := template.Must(template.ParseGlob(pattern))
 	// r.SetHTMLTemplate(tmpl)
 
-	r.LoadHTMLGlob("templates/**/*.html")
+	r.LoadHTMLGlob("templates/**/*")
 
 	r.Static("/static", "./static")
 
@@ -43,7 +44,7 @@ func main() {
 		v1.DELETE("/todo/:id", todo.Delete)
 	}
 
-	r.GET("/", todoWeb.Index)
+	r.GET("/todos", todoWeb.Index)
 	r.GET("/todos/:id", todoWeb.Show)
 
 	r.Run()

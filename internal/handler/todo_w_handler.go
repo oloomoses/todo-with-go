@@ -24,7 +24,7 @@ func (h *TodoWebHandler) Index(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "todos/index.html", gin.H{"Todo": todos})
+	c.HTML(http.StatusOK, "todos/index.html", gin.H{"Todos": todos})
 }
 
 func (h *TodoWebHandler) Show(c *gin.Context) {
@@ -37,5 +37,5 @@ func (h *TodoWebHandler) Show(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "/todos/show.html", gin.H{"Todo": todo})
+	c.HTML(http.StatusOK, "todos/show.html", gin.H{"Todo": todo})
 }
