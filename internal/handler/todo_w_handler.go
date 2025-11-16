@@ -3,8 +3,10 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
+	todo "github.com/oloomoses/todo/internal/model"
 	"github.com/oloomoses/todo/internal/repository"
 )
 
@@ -38,4 +40,44 @@ func (h *TodoWebHandler) Show(c *gin.Context) {
 	}
 
 	c.HTML(http.StatusOK, "todos/show.html", gin.H{"Todo": todo})
+}
+
+func (h *TodoWebHandler) NewTodoForm(c *gin.Context) {
+	c.HTML(http.StatusOK, "todos/new.html", gin.H{
+		"Title":     "",
+		"Completed": false,
+	})
+}
+
+func (h *TodoWebHandler) New(c *gin.Context) {
+	title := strings.TrimSpace(c.PostForm("title"))
+	completedstr := c.PostForm("completed")
+
+	completed := completedstr == "on"
+
+	if title == "" {
+		c.HTML(http.StatusBadRequest, "todos/new.html", gin.H{
+			"Error":     "Title cannot be blank",
+			"Title":     title,
+			"Completed": completed,
+		})
+		return
+	}
+
+	input := todo.Todo{
+		Title:     title,
+		Completed: completed,
+	}
+
+	if err := h.repo.Create(&input); err != nil {
+		c.HTML(http.StatusInternalServerError, "todos/new.html", gin.H{
+			"Error":     "Failed to create todo",
+			"Title":     title,
+			"Completed": completed,
+		})
+		return
+	}
+
+	c.Redirect(http.StatusSeeOther, "/todos")
+
 }

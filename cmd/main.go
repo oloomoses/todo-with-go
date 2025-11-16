@@ -46,6 +46,8 @@ func main() {
 
 	r.GET("/todos", todoWeb.Index)
 	r.GET("/todos/:id", todoWeb.Show)
+	r.GET("/todo/new", todoWeb.NewTodoForm)
+	r.POST("/todo", todoWeb.New)
 
 	r.Run()
 }

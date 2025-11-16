@@ -1,0 +1,26 @@
+{{define "todos/new.html"}}
+    {{template "partials/header"}}
+
+        <h2>Create New Todo</h2>
+
+        <form action="/todo" method="Post">
+            {{if .Error }} <p style="color: red;">{{.Error}}</p> {{end}}
+            <p>
+                <label for="Todo title">
+                    <input type="text" name="title" value="" id="title">
+                </label>
+            </p>
+
+            <p>
+                <label>
+                    <input type="checkbox" name="completed" id="completed" {{if .Completed}} checked {{end}}>
+                    Completed
+                </label>
+            </p>
+            
+            <button type="submit">Submit</button>
+            
+        </form>
+
+    {{template "partials/footer"}}
+{{end}}
