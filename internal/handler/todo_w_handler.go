@@ -121,3 +121,14 @@ func (h *TodoWebHandler) Update(c *gin.Context) {
 
 	c.Redirect(http.StatusSeeOther, "/")
 }
+
+func (h *TodoWebHandler) Delete(c *gin.Context) {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+
+	if err := h.repo.Delete(id); err != nil {
+		c.HTML(http.StatusBadRequest, "todos/show.html", gin.H{"Error": err})
+		return
+	}
+
+	c.Redirect(http.StatusSeeOther, "/")
+}

@@ -64,6 +64,7 @@ func main() {
 	r.POST("/todo", todoWeb.New)
 	r.GET("todos/:id/edit", todoWeb.Edit)
 	r.POST("todos/:id", todoWeb.Update)
+	r.POST("todos/:id/delete", todoWeb.Delete)
 
 	r.Run()
 }

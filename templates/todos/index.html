@@ -5,6 +5,7 @@
         <ul>
             {{ range .Todos }}
             <li>
+                <p>Id: {{.ID}}</p>
                 <a href="/todos/{{.ID}}">{{ .Title }}</a>
                 <p>{{ .Completed }}</p>
             </li>

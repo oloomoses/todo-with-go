@@ -6,7 +6,15 @@
             <hr>
             <a href="/"> Back</a>
             <a href="/todos/{{.Todo.ID}}/edit">Edit</a>
+            
         </todo>
 
+        <form method="POST" action="/todos/{{.Todo.ID}}/delete" style="display:inline"
+            onsubmit="return confirm('Are you sure you want to delete this todo?')">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" style="background:none;border:none;color:red;padding:0;cursor:pointer;">
+                Delete
+            </button>
+        </form>
     {{template "partials/footer"}}
 {{end}}
