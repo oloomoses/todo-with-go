@@ -10,12 +10,26 @@ import (
 	"github.com/oloomoses/todo/internal/repository"
 )
 
+func MethodOveride() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		if c.Request.Method == "POST" {
+			method := c.PostForm("_method")
+
+			if method != "" {
+				c.Request.Method = method
+			}
+		}
+		c.Next()
+	}
+}
+
 func main() {
 	if err := config.Load(); err != nil {
 		log.Fatal("Failed to load config: ", err)
 	}
 
 	r := gin.Default()
+	r.Use(MethodOveride())
 
 	// pattern := filepath.Join("templates", "**", "*.html")
 	// tmpl := template.Must(template.ParseGlob(pattern))
@@ -44,10 +58,12 @@ func main() {
 		v1.DELETE("/todo/:id", todo.Delete)
 	}
 
-	r.GET("/todos", todoWeb.Index)
+	r.GET("/", todoWeb.Index)
 	r.GET("/todos/:id", todoWeb.Show)
 	r.GET("/todo/new", todoWeb.NewTodoForm)
 	r.POST("/todo", todoWeb.New)
+	r.GET("todos/:id/edit", todoWeb.Edit)
+	r.POST("todos/:id", todoWeb.Update)
 
 	r.Run()
 }

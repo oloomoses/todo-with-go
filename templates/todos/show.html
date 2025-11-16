@@ -4,8 +4,8 @@
             <h2>{{.Todo.Title}}</h2>
             <div>{{.Todo.Completed | html}}</div>
             <hr>
-            <a href="/todos"> '\<-'\ Back</a>
-            <a href="/todo/{{.Todo.ID}}/edit">Edit</a>
+            <a href="/"> Back</a>
+            <a href="/todos/{{.Todo.ID}}/edit">Edit</a>
         </todo>
 
     {{template "partials/footer"}}

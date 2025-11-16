@@ -81,3 +81,43 @@ func (h *TodoWebHandler) New(c *gin.Context) {
 	c.Redirect(http.StatusSeeOther, "/todos")
 
 }
+
+func (h *TodoWebHandler) Edit(c *gin.Context) {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+
+	todo, err := h.repo.FindByID(id)
+
+	if err != nil {
+		c.HTML(http.StatusBadRequest, "todos/edit.html", gin.H{
+			"Error": "Todo not Found",
+		})
+		return
+	}
+
+	c.HTML(http.StatusOK, "todos/edit.html", gin.H{"Todo": todo, "ID": id})
+}
+
+func (h *TodoWebHandler) Update(c *gin.Context) {
+	id, _ := strconv.ParseUint(c.Param("id"), 10, 64)
+
+	title := strings.TrimSpace(c.PostForm("title"))
+	completed := c.PostForm("completed") == "on"
+
+	if title == "" {
+		c.HTML(http.StatusBadRequest, "todos/edit.html", gin.H{
+			"Error": "Title cannot be empty",
+		})
+		return
+	}
+
+	updates := make(map[string]interface{})
+	updates["Title"] = title
+	updates["Completed"] = completed
+
+	if err := h.repo.Update(id, updates); err != nil {
+		c.HTML(http.StatusInternalServerError, "todos/edit.html", gin.H{"Error": "Update Failed"})
+		return
+	}
+
+	c.Redirect(http.StatusSeeOther, "/")
+}
