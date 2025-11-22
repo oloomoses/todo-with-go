@@ -1,0 +1,26 @@
+{{define "users/new"}}
+    {{template "partials/header"}}
+
+        {{if .Error }} <p style="color: red;">{{.Error}}</p> {{end}}
+
+        <form action="/user" method="Post">            
+            <p>
+                <label for="Username">
+                    Username
+                    <input type="text" name="username" value="" id="username">
+                </label>
+            </p>
+
+            <p>
+                <label for="Password">
+                    Password
+                    <input type="password" name="password" id="password">                    
+                </label>
+            </p>
+            
+            <button type="submit">Submit</button>
+            
+        </form>
+    {{template "partials/footer"}}
+
+{{end}}

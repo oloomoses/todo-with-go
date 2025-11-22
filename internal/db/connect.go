@@ -11,6 +11,7 @@ import (
 	"gorm.io/gorm/logger"
 
 	_ "github.com/lib/pq"
+	"github.com/oloomoses/todo/internal/model"
 	todo "github.com/oloomoses/todo/internal/model"
 )
 
@@ -54,6 +55,6 @@ func InitDB() *gorm.DB {
 }
 
 func Migrate(db *gorm.DB) {
-	db.AutoMigrate(&todo.Todo{})
+	db.AutoMigrate(&todo.Todo{}, &model.User{})
 	fmt.Println("Auto-migration completed.")
 }

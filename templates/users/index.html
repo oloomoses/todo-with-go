@@ -1,0 +1,16 @@
+{{define "users/index"}}
+    {{template "partials/header"}}
+
+    <h2>Users</h2>
+    
+    <ul>
+        {{ range .Users }}
+        <li>
+            <p>{{.UserID}}</p>
+            <p>{{.Username}}</p>
+            <p>{{.Password}}</p>
+        </li>
+        {{ end }}
+    </ul>
+    {{template "partials/footer"}}
+{{end}}

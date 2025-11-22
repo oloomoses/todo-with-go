@@ -46,7 +46,7 @@ func main() {
 	// todo web handler
 	todoWeb := handler.NewTodoWebHandler(todoRepo)
 
-	// db.Migrate(dbconn)
+	db.Migrate(dbconn)
 
 	v1 := r.Group("/api/v1")
 
@@ -65,6 +65,13 @@ func main() {
 	r.GET("todos/:id/edit", todoWeb.Edit)
 	r.POST("todos/:id", todoWeb.Update)
 	r.POST("todos/:id/delete", todoWeb.Delete)
+
+	// user routes
+	userRepo := repository.NewUserRepo(dbconn)
+	user := handler.NewUserHandler(userRepo)
+	r.GET("/users/new", user.New)
+	r.POST("/user", user.Register)
+	r.GET("/users", user.AllUsers)
 
 	r.Run()
 }
