@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/oloomoses/todo/internal/model"
@@ -28,7 +29,7 @@ func (h *UserHandler) Register(c *gin.Context) {
 	password := c.PostForm("password")
 
 	input := model.User{
-		Username: username,
+		Username: strings.ToLower(username),
 		Password: password,
 	}
 

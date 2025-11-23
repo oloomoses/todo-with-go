@@ -2,6 +2,7 @@ package repository
 
 import (
 	user "github.com/oloomoses/todo/internal/model"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
@@ -13,8 +14,18 @@ func NewUserRepo(db *gorm.DB) *UserRepo {
 	return &UserRepo{db: db}
 }
 
-func (r *UserRepo) Create(user *user.User) error {
-	return r.db.Create(&user).Error
+func (r *UserRepo) Create(newUser *user.User) error {
+
+	hashedPass, err := hashePassword(newUser.Password)
+
+	if err != nil {
+		return err
+	}
+	hashedUser := user.User{
+		Username: newUser.Username,
+		Password: hashedPass,
+	}
+	return r.db.Create(&hashedUser).Error
 }
 
 func (r *UserRepo) All() ([]user.User, error) {
@@ -22,4 +33,9 @@ func (r *UserRepo) All() ([]user.User, error) {
 	err := r.db.Find(&users).Error
 
 	return users, err
+}
+
+func hashePassword(password string) (string, error) {
+	byte, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+	return string(byte), err
 }

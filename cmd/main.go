@@ -71,7 +71,7 @@ func main() {
 	user := handler.NewUserHandler(userRepo)
 	r.GET("/users/new", user.New)
 	r.POST("/user", user.Register)
-	r.GET("/users", user.AllUsers)
+	r.GET("/users/index", user.AllUsers)
 
 	r.Run()
 }
