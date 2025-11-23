@@ -1,9 +1,10 @@
-{{define "users/new"}}
+{{define "users/login"}}
     {{template "partials/header"}}
+        <h2>Login</h2>
 
         {{if .Error }} <p style="color: red;">{{.Error}}</p> {{end}}
 
-        <form action="/user" method="Post">            
+        <form action="/login" method="Post">            
             <p>
                 <label for="Username">
                     Username
@@ -22,7 +23,7 @@
             
         </form>
 
-        <p>Have an Account? <a href="/login"> Login</a></p>
+        <p>New to this aPP? <a href="users/new"> Register</a></p>
     {{template "partials/footer"}}
 
 {{end}}

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/oloomoses/todo/internal/model"
 	"github.com/oloomoses/todo/internal/repository"
 )
@@ -59,3 +60,38 @@ func (h *UserHandler) AllUsers(c *gin.Context) {
 		"Users": users,
 	})
 }
+
+func (h *UserHandler) LoadLogin(c *gin.Context) {
+	c.HTML(http.StatusOK, "users/login", gin.H{
+		"username": "",
+		"password": "",
+	})
+}
+
+func (h *UserHandler) Login(c *gin.Context) {
+	username := c.PostForm("username")
+	password := c.PostForm("password")
+
+	err := h.repo.VerifyUser(username, password)
+
+	if err != nil {
+		c.HTML(http.StatusExpectationFailed, "users/login", gin.H{"Error": err})
+		return
+	}
+
+	sessionId := uuid.New().String()
+
+	setCookie(c, sessionId)
+	c.Redirect(http.StatusSeeOther, "/")
+}
+
+func setCookie(c *gin.Context, sessionID string) {
+	c.SetCookie("session_id", sessionID, 2*3600, "/", "", false, true)
+}
+
+// Next Steps
+// Generate session
+// Make user stay logged in
+// add Protected routes
+// Create middleware for protected routes
+// Logout User

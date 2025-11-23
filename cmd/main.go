@@ -73,5 +73,9 @@ func main() {
 	r.POST("/user", user.Register)
 	r.GET("/users/index", user.AllUsers)
 
+	// login user
+	r.GET("/login", user.LoadLogin)
+	r.POST("/login", user.Login)
+
 	r.Run()
 }
