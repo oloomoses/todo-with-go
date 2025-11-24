@@ -12,13 +12,13 @@ func RequireLogin() gin.HandlerFunc {
 		cookieStr, err := c.Cookie("session_id")
 
 		if err != nil {
-			c.AbortWithStatus(http.StatusBadRequest)
+			c.Redirect(http.StatusSeeOther, "/login")
 			return
 		}
 
 		user, err := auth.VeriFySession(cookieStr)
 		if err != nil {
-			c.AbortWithStatus(401)
+			c.Redirect(http.StatusSeeOther, "/login")
 			return
 		}
 
