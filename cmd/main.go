@@ -7,6 +7,7 @@ import (
 	"github.com/oloomoses/todo/internal/config"
 	"github.com/oloomoses/todo/internal/db"
 	"github.com/oloomoses/todo/internal/handler"
+	"github.com/oloomoses/todo/internal/middleware"
 	"github.com/oloomoses/todo/internal/repository"
 )
 
@@ -58,13 +59,16 @@ func main() {
 		v1.DELETE("/todo/:id", todo.Delete)
 	}
 
-	r.GET("/", todoWeb.Index)
-	r.GET("/todos/:id", todoWeb.Show)
-	r.GET("/todo/new", todoWeb.NewTodoForm)
-	r.POST("/todo", todoWeb.New)
-	r.GET("todos/:id/edit", todoWeb.Edit)
-	r.POST("todos/:id", todoWeb.Update)
-	r.POST("todos/:id/delete", todoWeb.Delete)
+	protected := r.Group("/todos")
+	protected.Use(middleware.RequireLogin())
+
+	protected.GET("/", todoWeb.Index)
+	protected.GET("/:id", todoWeb.Show)
+	protected.GET("/todo/new", todoWeb.NewTodoForm)
+	protected.POST("/todo", todoWeb.New)
+	protected.GET("/:id/edit", todoWeb.Edit)
+	protected.POST("/:id", todoWeb.Update)
+	protected.POST("/:id/delete", todoWeb.Delete)
 
 	// user routes
 	userRepo := repository.NewUserRepo(dbconn)

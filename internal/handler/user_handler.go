@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/oloomoses/todo/internal/model"
 	"github.com/oloomoses/todo/internal/repository"
+	"github.com/oloomoses/todo/internal/service/auth"
 )
 
 type UserHandler struct {
@@ -69,7 +69,7 @@ func (h *UserHandler) LoadLogin(c *gin.Context) {
 }
 
 func (h *UserHandler) Login(c *gin.Context) {
-	username := c.PostForm("username")
+	username := strings.ToLower(c.PostForm("username"))
 	password := c.PostForm("password")
 
 	err := h.repo.VerifyUser(username, password)
@@ -79,10 +79,10 @@ func (h *UserHandler) Login(c *gin.Context) {
 		return
 	}
 
-	sessionId := uuid.New().String()
+	session := auth.GenerateSession(username)
 
-	setCookie(c, sessionId)
-	c.Redirect(http.StatusSeeOther, "/")
+	setCookie(c, session)
+	c.Redirect(http.StatusSeeOther, "/todos")
 }
 
 func setCookie(c *gin.Context, sessionID string) {
